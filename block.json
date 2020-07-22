@@ -1,0 +1,14 @@
+{
+	"name": "connpass-block/connpass-block",
+	"title": "Connpass Block",
+	"category": "connpass",
+	"icon": "smiley",
+	"description": "Example block written with ESNext standard and JSX support – build step required.",
+	"textdomain": "connpass-block",
+	"supports": {
+		"html": false
+	},
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}
