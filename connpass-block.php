@@ -12,11 +12,9 @@
  */
 
 require_once(__DIR__ . '/repository/class-connpass-repository.php');
-require_once(__DIR__ . '/clsss-short-code.php');
+require_once(__DIR__ . '/repository/class-connpass-image-repository.php');
 
 $connpass_repository = new \ippey\connpass_block\repository\ConnpassRepository();
-$shortCode = new \ippey\connpass_block\ShortCode($connpass_repository);
-$shortCode->initialize();
 
 /**
  * Registers all block assets so that they can be enqueued through the block editor
@@ -81,13 +79,23 @@ function connpass_block_render_callback($attr = [])
 	if (array_key_exists('series_id', $attr)) {
 		$count = isset($attr['count']) ? $attr['count'] : 10;
 		$events = connpass_block_list($attr['series_id'], $count);
+		if ($events instanceof \WP_Error) {
+			return '<p></p>';
+		}
+		$image_repository = new \ippey\connpass_block\repository\ConnpassImageRepository();
+		$events = array_map( function ($event) use ($image_repository) {
+			$image_url = $image_repository->findBySlug($event->event_id);
+			$event->started_at = (new DateTime($event->started_at))->format('Y-m-d H:i');
+			$event->image_url = $image_url;
+			return $event;
+		}, $events);
 		$result = '<ul>';
 		foreach ($events as $event) {
-			$started_at = get_date_from_gmt($event->started_at, 'Y-m-d H:i:s');
 			$result .= '<li>';
+			$result .= "<img src=\"{$event->image_url}\" alt=\"{$event->title}\">";
 			$result .= '<p class="title"><a href="' . $event->event_url . '" target="_blank">' . $event->title . '</a></p>';
 			$result .= "<p>{$event->catch}</p>";
-			$result .= "<p>{$started_at}</p>";
+			$result .= "<p>{$event->started_at}</p>";
 			$result .= "<p>{$event->accepted} / {$event->limit}</p>";
 			$result .= "</li>";
 		}
@@ -97,6 +105,12 @@ function connpass_block_render_callback($attr = [])
 	return '<p>connpass ブロック</p>';
 }
 
+/**
+ * @param $series_id
+ * @param int $count
+ * @param int $order
+ * @return array|WP_Error
+ */
 function connpass_block_list($series_id, $count = 10, $order = 2)
 {
 	$connpass_repository = new \ippey\connpass_block\repository\ConnpassRepository();

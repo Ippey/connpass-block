@@ -7,6 +7,13 @@ namespace ippey\connpass_block\repository;
 class ConnpassRepository
 {
 	private $url = 'https://connpass.com/api/v1/event/';
+
+	/**
+	 * @param $series_id
+	 * @param int $limit
+	 * @param int $order
+	 * @return \WP_Error|array
+	 */
 	public function find_by_series_id($series_id, $limit = 10, $order = 2)
 	{
 		$params = [
