@@ -13,11 +13,8 @@
 
 require_once(__DIR__ . '/repository/class-connpass-repository.php');
 require_once(__DIR__ . '/repository/class-connpass-image-repository.php');
-require_once(__DIR__ . '/clsss-short-code.php');
 
 $connpass_repository = new \ippey\connpass_block\repository\ConnpassRepository();
-$shortCode = new \ippey\connpass_block\ShortCode($connpass_repository);
-$shortCode->initialize();
 
 /**
  * Registers all block assets so that they can be enqueued through the block editor
