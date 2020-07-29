@@ -88,14 +88,14 @@ function connpass_block_render_callback($attr = [])
 		$image_repository = new \ippey\connpass_block\repository\ConnpassImageRepository();
 		$events = array_map( function ($event) use ($image_repository) {
 			$image_url = $image_repository->findBySlug($event->event_id);
-			$event->started_at = get_date_from_gmt($event->started_at, 'Y-m-d H:i:s');
+			$event->started_at = (new DateTime($event->started_at))->format('Y-m-d H:i');
 			$event->image_url = $image_url;
 			return $event;
 		}, $events);
 		$result = '<ul>';
 		foreach ($events as $event) {
 			$result .= '<li>';
-			$result .= "<img src=\"{$event->image_url}\">";
+			$result .= "<img src=\"{$event->image_url}\" alt=\"{$event->title}\">";
 			$result .= '<p class="title"><a href="' . $event->event_url . '" target="_blank">' . $event->title . '</a></p>';
 			$result .= "<p>{$event->catch}</p>";
 			$result .= "<p>{$event->started_at}</p>";
