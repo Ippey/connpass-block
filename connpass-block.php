@@ -89,13 +89,13 @@ function connpass_block_render_callback($attr = [])
 			$event->image_url = $image_url;
 			return $event;
 		}, $events);
-		$result = '<ul class="connpass-block">';
+		$result = "<ul class=\"connpass-block\">";
 		foreach ($events as $event) {
-			$result .= '<li class="connpass-block-item">';
-			$result .= "<p class=\"connpass-block-date\">{$event->started_at}</p>";
-			$result .= '<p class="connpass-block-title"><a href="' . $event->event_url . '" target="_blank">' . $event->title . '</a></p>';
-			$result .= "<figure class=\"connpass-block-image\"><img src=\"{$event->image_url}\" alt=\"{$event->title}\"></figure>";
-			$result .= '<p class="connpass-block-button"><a href="' . $event->event_url . '" target="_blank">参加登録</a></p>';
+			$result .= "<li class=\"connpass-block-item\">";
+			$result .= "<p class=\"connpass-block-date\">" . $event->started_at . "</p>";
+			$result .= "<p class=\"connpass-block-title\"><a href=\"" . $event->event_url . "\" target=\"_blank\">" . $event->title . "</a></p>";
+			$result .= "<figure class=\"connpass-block-image\"><a href=\"" . $event->event_url . "\" target=\"_blank\"><img src=\"" . $event->image_url . "\" alt=\"" . $event->title . "\"></a></figure>";
+			$result .= "<p class=\"connpass-block-button\"><a href=\"" . $event->event_url . "\" target=\"_blank\">参加登録</a></p>";
 			$result .= "</li>";
 		}
 		$result .= "</ul>";
